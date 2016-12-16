@@ -1,0 +1,62 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Pesquisa Produtos</ui:define>
+
+	<ui:define name="corpo">
+		<h:form>
+			<h1>Pesquisa de Produtos</h1>
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button value="Pesquisa" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Novo" outcome="/produtos/cadastroProduto" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="painel"
+				style="width: 100%; margin-top: 20px;" columnClasses="rotulo, campo">
+				<p:outputLabel value="Código" for="codigo" />
+				<p:inputText id="codigo" size="30" />
+
+				<p:outputLabel value="Nome" for="nome" />
+				<p:inputText id="nome" size="60" />
+			</p:panelGrid>
+			<p:dataTable id="produtosfiltrados"
+				value="#{pesquisaProdutosBean.produtosFiltrados}" var="produto"
+				emptyMessage="Nenhum produto" style="margin-top: 20px" rows="10"
+				paginator="true" paginatorPosition="bottom">
+
+				<p:column headerText="Código" width="100" style="text-align: center">
+					<h:outputText value="123" />
+				</p:column>
+
+				<p:column headerText="Nome">
+					<h:outputText value="Koe" />
+				</p:column>
+
+				<p:column headerText="Categoria">
+					<h:outputText value="Doces - Balas e Doces" />
+				</p:column>
+
+				<p:column headerText="Valor Unitário">
+					<h:outputText value="1,99" />
+				</p:column>
+
+				<p:column headerText="Estoque">
+					<h:outputText value="98" />
+				</p:column>
+
+				<p:column headerText="Opções " style="text-align:center" width="100">
+					<p:commandButton icon="ui-icon-trash" title="Excluir" />
+					<p:button icon="ui-icon-pencil" title="Editar" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
