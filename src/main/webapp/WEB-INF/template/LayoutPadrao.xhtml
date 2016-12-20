@@ -10,9 +10,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title><ui:insert name="titulo">Sistemas de Pedidos de Vendas</ui:insert></title>
 	<h:outputStylesheet library="css" name="sistema.css" />
-	<h:outputScript library="js" name="jquery-1.11.1.min.js" />
-	<h:outputScript library="js" name="jquery.maskMoney.js" />
 
+	<h:outputScript library="js" name="jquery.maskMoney.js" />
 </h:head>
 
 <h:body>
@@ -26,11 +25,38 @@
 	</p:ajaxStatus>
 
 	<header>
-	<div>
-		<h:link>
+
+	<div style="float: left">
+		<h:link outcome="/home">
 			<h:graphicImage library="images" name="logo.png" />
 		</h:link>
 	</div>
+
+	<div style="float: right; margin-right: 110px;">
+		<span
+			style="float: left; height: 30px; line-height: 30px; margin-right: 60px">Olá
+			usuario!</span>
+
+		<h:form style="display: inline-block;">
+			<p:menubar styleClass="menu-sistema">
+				<p:submenu label="Cadastros">
+					<p:menuitem value="Clientes" />
+					<p:menuitem value="Usuários" />
+					<p:separator />
+					<p:menuitem value="Categorias" />
+					<p:menuitem value="Produtos" outcome="/produtos/pesquisaProdutos" />
+				</p:submenu>
+				<p:submenu label="Pedidos">
+					<p:menuitem value="Novo pedido" outcome="/pedidos/cadastroPedido"/>
+					<p:menuitem value="Pesquisa" outcome="/pedidos/pesquisaPedidos" />
+				</p:submenu>
+				
+				<p:menuitem value="Sair" />
+			</p:menubar>
+		</h:form>
+	</div>
+	<div style="clear: both"></div>
+
 	</header>
 
 	<div id="conteudo">

@@ -3,18 +3,17 @@ package com.sistema.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
-@ManagedBean
-@ViewScoped
+@Named
+@RequestScoped
 public class PesquisaProdutosBean {
 	
 	private static List<Integer> produtosFiltrados;
 
 	
 	public PesquisaProdutosBean() {
-		System.out.println("Funcionando");
 		produtosFiltrados = new ArrayList<>();
 		for(int i=0; i < 50; i++){
 			produtosFiltrados.add(i);

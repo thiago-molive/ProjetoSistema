@@ -8,9 +8,29 @@
 	<ui:define name="titulo">Cadastro Pedidos</ui:define>
 
 	<ui:define name="corpo">
+
 		<h:form>
 			<h1>Cadastro de Pedidos</h1>
-			<ui:include src="/WEB-INF/template/pedidos/botoesPedido.xhtml"/>
+			
+			<p:messages autoUpdate="true"/>
+			<p:growl autoUpdate="true"/>
+			
+			<ui:include src="/WEB-INF/template/pedidos/botoesPedido.xhtml" />
+
+			<ui:include src="/WEB-INF/template/pedidos/capaPedido.xhtml" />
+
+			<p:tabView style="margin-top: 20px">
+				<p:tab title="itens">
+					<ui:include src="/WEB-INF/template/pedidos/itensPedido.xhtml" />
+				</p:tab>
+				<p:tab title="Dados de Entraga">
+					<ui:include
+						src="/WEB-INF/template/pedidos/dadosEntregaPedido.xhtml" />
+				</p:tab>
+				<p:tab title="Observação">
+					<ui:include src="/WEB-INF/template/pedidos/observacaoPedido.xhtml" />
+				</p:tab>
+			</p:tabView>
 		</h:form>
 	</ui:define>
 </ui:composition>
