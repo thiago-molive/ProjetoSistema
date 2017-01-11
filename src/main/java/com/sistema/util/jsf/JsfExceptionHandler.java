@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.faces.FacesException;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
@@ -12,8 +13,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +48,7 @@ public class JsfExceptionHandler extends ExceptionHandlerWrapper {
 					redireciona("/");
 				}else if(negocio != null){
 					handled = true;
-					FacesUtil.addErrorMessage(negocio.getMessage());
+					FacesUtil.addMessage(negocio.getMessage(), FacesMessage.SEVERITY_ERROR);
 				}
 				else{
 					handled = true;

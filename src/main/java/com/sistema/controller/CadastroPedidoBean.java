@@ -1,30 +1,37 @@
 package com.sistema.controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 
-import com.sistema.service.NegocioException;
+import com.sistema.model.EnderecoEntrega;
+import com.sistema.model.Pedido;
 
 @Named
-@RequestScoped
-public class CadastroPedidoBean {
-	
+@ViewScoped
+public class CadastroPedidoBean implements Serializable{
+	private static final long serialVersionUID = 1L;
+	private Pedido pedido;
 	List<Integer> itens;
 
 	public CadastroPedidoBean() {
+		this.pedido = new Pedido();
+		this.pedido.setEnderecoEntrega(new EnderecoEntrega());
 		itens = new ArrayList<>();
 		itens.add(1);
 	}
-
+	
+	public void salvar() {
+	}
+	
 	public List<Integer> getItens() {
 		return itens;
 	}
-	
-	public void salvar() {
-		throw new NegocioException("Não pode ser salvo, pois não há implementação.");
+
+	public Pedido getPedido() {
+		return pedido;
 	}
-	
 }
