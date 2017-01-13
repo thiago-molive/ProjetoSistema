@@ -36,7 +36,6 @@ public class CadastroProdutoBean implements Serializable {
 		limpar();
 	}
 
-	//@PostConstruct
 	private void limpar() {
 		produto = new Produto();
 		categoriaPai = null;
@@ -46,8 +45,6 @@ public class CadastroProdutoBean implements Serializable {
 	public void carregarSubCategorias() {
 		if (this.categoriaPai != null) {
 			this.subCategorias = categorias.getSubCategorias(categoriaPai);
-			//remover essa linha
-			//this.subCategorias.forEach(p -> System.out.println(p.getDescricao()));
 		}
 	}
 

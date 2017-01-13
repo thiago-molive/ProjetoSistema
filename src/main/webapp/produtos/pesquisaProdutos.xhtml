@@ -8,14 +8,15 @@
 	<ui:define name="titulo">Pesquisa Produtos</ui:define>
 
 	<ui:define name="corpo">
-		<h:form>
+		<h:form id="frm">
 			<h1>Pesquisa de Produtos</h1>
-			
-			<p:messages autoUpdate="true" closable="true"/>
-			
+
+			<p:messages autoUpdate="true" closable="true" />
+
 			<p:toolbar style="margin-top: 20px">
 				<p:toolbarGroup>
-					<p:commandButton value="Pesquisar"  action="#{pesquisaProdutosBean.pesquisar}" update="@form"/>
+					<p:commandButton value="Pesquisar"
+						action="#{pesquisaProdutosBean.pesquisar}" update="@form" />
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
 					<p:button value="Novo" outcome="/produtos/cadastroProduto" />
@@ -25,12 +26,14 @@
 			<p:panelGrid columns="2" id="painel"
 				style="width: 100%; margin-top: 20px;" columnClasses="rotulo, campo">
 				<p:outputLabel value="Código" for="codigo" />
-				<p:inputText id="codigo" size="30" value="#{pesquisaProdutosBean.filtro.numero}" />
+				<p:inputText id="codigo" size="30"
+					value="#{pesquisaProdutosBean.filtro.numero}" />
 
 				<p:outputLabel value="Nome" for="nome" />
-				<p:inputText id="nome" size="60" value="#{pesquisaProdutosBean.filtro.nome}"/>
+				<p:inputText id="nome" size="60"
+					value="#{pesquisaProdutosBean.filtro.nome}" />
 			</p:panelGrid>
-			
+
 			<p:dataTable id="produtosfiltrados"
 				value="#{pesquisaProdutosBean.produtosFiltrados}" var="produto"
 				emptyMessage="Nenhum produto" style="margin-top: 20px" rows="10"
@@ -45,7 +48,8 @@
 				</p:column>
 
 				<p:column headerText="Categoria">
-					<h:outputText value="#{produto.categoria.categoriaPai.descricao} - #{produto.categoria.descricao}" />
+					<h:outputText
+						value="#{produto.categoria.categoriaPai.descricao} - #{produto.categoria.descricao}" />
 				</p:column>
 
 				<p:column headerText="Valor Unitário">
@@ -59,16 +63,25 @@
 				</p:column>
 
 				<p:column headerText="Opções " style="text-align:center" width="100">
-					<p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="PF('confirmaExclusao').show()"/>
-					<p:button icon="ui-icon-pencil" title="Editar" outcome="/produtos/cadastroProduto">
-						<f:param name="produto" value="#{produto.id}"/>
+					<p:commandButton action="#{pesquisaProdutosBean.exibeDialog()}" icon="ui-icon-trash" title="Excluir" process="@this" update=":frm:dialogo">
+						<f:setPropertyActionListener value="#{produto}" target="#{pesquisaProdutosBean.produtoSelecionado}" />
+					</p:commandButton>
+					<p:button icon="ui-icon-pencil" title="Editar"
+						outcome="/produtos/cadastroProduto">
+						<f:param name="produto" value="#{produto.id}" />
 					</p:button>
 				</p:column>
 			</p:dataTable>
-			
-			<p:confirmDialog header="Excluir Produto" message="Tem certeza de que deseja excluir este produto?" widgetVar="confirmaExclusao">
-				<p:button value="Não" onclick="PF('confirmaExclusao').hide()"/>
-				<p:commandButton value="Sim" oncomplete="PF('confirmaExclusao').hide()"/>
+
+			<p:confirmDialog header="Excluir Produto"
+				message="Tem certeza de que deseja excluir o produto #{pesquisaProdutosBean.produtoSelecionado.numero} - #{pesquisaProdutosBean.produtoSelecionado.nome}?"
+				widgetVar="confirmaExclusao" id="dialogo">
+
+				<p:button value="Não" onclick="PF('confirmaExclusao').hide()" />
+
+				<p:commandButton value="Sim"
+					oncomplete="PF('confirmaExclusao').hide()"
+					action="#{pesquisaProdutosBean.excluir}" process="@this" update=":frm:produtosfiltrados"/>
 			</p:confirmDialog>
 		</h:form>
 	</ui:define>

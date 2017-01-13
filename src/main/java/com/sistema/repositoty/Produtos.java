@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,6 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.sistema.model.Produto;
 import com.sistema.repositoty.filter.ProdutoFilter;
+import com.sistema.service.NegocioException;
+import com.sistema.util.jpa.Transactional;
 
 public class Produtos implements Serializable {
 
@@ -37,7 +40,7 @@ public class Produtos implements Serializable {
 		}
 
 		if (StringUtils.isNotBlank(filtro.getNome())) {
-			predicate = builder.and(predicate, builder.like(from.get("nome"), "%" + filtro.getNome() + "%"));
+			predicate = builder.and(predicate, builder.like(from.get("nome"), "%"+filtro.getNome()+"%"));
 		}
 		TypedQuery<Produto> tq = manager
 				.createQuery(query.select(from).where(predicate).orderBy(builder.asc(from.get("nome"))));
@@ -48,6 +51,17 @@ public class Produtos implements Serializable {
 		return manager.merge(produto);
 	}
 
+	@Transactional
+	public void remover(Produto produto){
+		try{
+			produto = porId(produto.getId());
+			manager.remove(produto);
+			manager.flush();
+		}catch (PersistenceException e) {
+			throw new NegocioException("Não é possivel excluir esse produto!" + e.getMessage());
+		}
+	}
+	
 	public Produto porNumero(String numero) {
 		try {
 			return manager.createQuery("from Produto where upper(numero) = :numero", Produto.class)
