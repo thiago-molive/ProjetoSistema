@@ -34,6 +34,7 @@ public class Categoria implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
 	@Column(nullable = false, length = 60)
 	public String getDescricao() {
 		return descricao;
@@ -42,6 +43,7 @@ public class Categoria implements Serializable {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	
 	@ManyToOne
 	@JoinColumn(name = "categoria_pai_id")
 	public Categoria getCategoriaPai() {
@@ -51,6 +53,7 @@ public class Categoria implements Serializable {
 	public void setCategoriaPai(Categoria categoriaPai) {
 		this.categoriaPai = categoriaPai;
 	}
+	
 	@OneToMany(mappedBy = "categoriaPai", cascade = CascadeType.ALL)
 	public List<Categoria> getSubcategorias() {
 		return subcategorias;

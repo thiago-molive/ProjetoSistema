@@ -2,6 +2,8 @@ package com.sistema.repositoty;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,12 +52,16 @@ public class Pedidos implements Serializable {
 
 		if (filtro.getDataCriacaoDe() != null) {
 			predicate = builder.and(predicate,
-					builder.greaterThanOrEqualTo(from.get("dataCriacao"), filtro.getDataCriacaoDe()));
+					builder.greaterThanOrEqualTo(from.<Date>get("dataCriacao"), filtro.getDataCriacaoDe()));
 		}
 
 		if (filtro.getDataCriacaoAte() != null) {
+			//Correção do bug do lesThanOrEqual
+			Calendar chatisse = Calendar.getInstance();
+			chatisse.setTime(filtro.getDataCriacaoAte());
+			chatisse.add(Calendar.DATE, +1);
 			predicate = builder.and(predicate,
-					builder.lessThanOrEqualTo(from.get("dataCriacao"), filtro.getDataCriacaoAte()));
+					builder.lessThanOrEqualTo(from.get("dataCriacao"),chatisse.getTime()));
 		}
 
 		if (StringUtils.isNotBlank(filtro.getCliente())) {
