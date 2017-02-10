@@ -30,7 +30,12 @@ public class Pedidos implements Serializable {
 
 	@Inject
 	private EntityManager manager;
+	
+	public Pedido porId(Long id){
+		return manager.find(Pedido.class, id);
+	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Pedido> pedidoFiltrados(PedidoFilter filtro) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Pedido> query = builder.createQuery(Pedido.class);
@@ -80,5 +85,9 @@ public class Pedidos implements Serializable {
 		TypedQuery<Pedido> tquery = manager
 				.createQuery(query.select(from).where(predicate).orderBy(builder.asc(from.get("id"))));
 		return tquery.getResultList();
+	}
+
+	public Pedido guardar(Pedido pedido) {
+		return manager.merge(pedido);
 	}
 }

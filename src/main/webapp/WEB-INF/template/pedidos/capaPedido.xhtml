@@ -7,52 +7,74 @@
 	<p:panelGrid columns="4" style="width: 100%; margin-top:20px;"
 		columnClasses="rotulo,campo,rotulo,campo">
 
-		<p:outputLabel value="Numero" for="numero" />
-		<h:outputText id="numero" value="#{cadastroPedidoBean.pedido.id}"/>
+		<p:outputLabel value="Numero" for="numero"
+			rendered="#{cadastroPedidoBean.pedido.existente}" />
+		<h:outputText id="numero" value="#{cadastroPedidoBean.pedido.id}"
+			rendered="#{cadastroPedidoBean.pedido.existente}" />
 
-		<p:outputLabel value="Data de Criação" for="dataCriacao" />
-		<h:outputText id="dataCriacao" value="#{cadastroPedidoBean.pedido.dataCriacao}" >
-			<f:convertDateTime pattern="dd/MM/yyyy"/>
+		<p:outputLabel value="Data de Criação" for="dataCriacao"
+			rendered="#{cadastroPedidoBean.pedido.existente}" />
+		<h:outputText id="dataCriacao"
+			value="#{cadastroPedidoBean.pedido.dataCriacao}"
+			rendered="#{cadastroPedidoBean.pedido.existente}">
+			<f:convertDateTime pattern="dd/MM/yyyy" />
 		</h:outputText>
 
 		<p:outputLabel value="Status" for="status" />
-		<h:outputText id="status" value="#{cadastroPedidoBean.pedido.status}" />
+		<h:outputText id="status"
+			value="#{cadastroPedidoBean.pedido.status.descricao}" />
 
-		<p:outputLabel value="Vendedor" for="vendedor" />
-		<p:selectOneMenu id="vendedor" value="#{cadastroPedidoBean.pedido.vendedor}">
-			<f:selectItem itemLabel="Selecione..." />
-			<f:selectItem itemLabel="Joana Daora" />
-		</p:selectOneMenu>
+		<p:outputLabel value="Vendedor" for="usuarioVendedor" />
+		<p:autoComplete id="usuarioVendedor" dropdown="true"
+			value="#{cadastroPedidoBean.pedido.vendedor}"
+			completeMethod="#{cadastroPedidoBean.autoCompleteVendedor}"
+			var="vendedor" itemLabel="#{vendedor.nome}" itemValue="#{vendedor}"
+			forceSelection="true" />
 
 		<p:outputLabel value="Cliente" for="cliente" />
-		<p:autoComplete id="cliente" size="40" dropdown="true" value="#{cadastroPedidoBean.pedido.cliente}"/>
+		<p:autoComplete id="cliente" size="40" dropdown="true"
+			value="#{cadastroPedidoBean.pedido.cliente}"
+			completeMethod="#{cadastroPedidoBean.autoCompleteCliente}"
+			var="cliente" itemLabel="#{cliente.nome}" itemValue="#{cliente}"
+			forceSelection="true" />
 
 		<p:outputLabel value="Forma de Pagamento" for="formaPgto" />
-		<p:selectOneMenu id="formaPgto" value="#{cadastroPedidoBean.pedido.formaPagamento}">
+		<p:selectOneMenu id="formaPgto"
+			value="#{cadastroPedidoBean.pedido.formaPagamento}">
 			<f:selectItem itemLabel="Selecione..." />
-			<f:selectItem itemLabel="Dinheiro sempre!" />
+			<f:selectItems value="#{cadastroPedidoBean.formaPagamento}"
+				var="formaPagamento" itemLabel="#{formaPagamento.desc}"
+				itemValue="#{formaPagamento}" />
 		</p:selectOneMenu>
 
 		<p:outputLabel value="Valor do Frete" for="valorFrete" />
-		<p:inputText id="valorFrete" size="10" maxlength="10" value="#{cadastroPedidoBean.pedido.valorFrete}">
-			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" type="currency" currencySymbol="R$"/>
+		<p:inputText id="valorFrete" size="10" maxlength="10"
+			styleClass="moeda" value="#{cadastroPedidoBean.pedido.valorFrete}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			<p:ajax event="change"
+				listener="#{cadastroPedidoBean.calcularValorTotal()}"
+				update="totalPedido" process="@this" />
 		</p:inputText>
-		
+
 		<p:outputLabel value="Subtotal" for="subtotal" />
-		<h:outputText id="subtotal" value="R$ 0,00" style="font-weight: bold">
-		<f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" type="currency" currencySymbol="R$"/>
+		<h:outputText id="subtotal" value="#{cadastroPedidoBean.pedido.valorSubTotal}" style="font-weight: bold">
+			<f:convertNumber type="currency"/>
 		</h:outputText>
-		
+
 		<p:outputLabel value="Valor de Desconto" for="valorDesconto" />
-		<p:inputText id="valorDesconto" size="10" maxlength="10" value="#{cadastroPedidoBean.pedido.valorDesconto}">
-			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" type="currency" currencySymbol="R$"/>
+		<p:inputText id="valorDesconto" size="10" maxlength="10"
+			styleClass="moeda" value="#{cadastroPedidoBean.pedido.valorDesconto}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			<p:ajax event="change" listener="#{cadastroPedidoBean.calcularValorTotal()}" process="@this" update="totalPedido"/>
 		</p:inputText>
-		
+
 		<p:outputLabel value="Total do Pedido" for="totalPedido" />
-		<h:outputText id="totalPedido" value="#{cadastroPedidoBean.pedido.valorTotal}" style="font-weight: bold; font-size:1.1em;">
-			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" type="currency" currencySymbol="R$"/>
+		<h:outputText id="totalPedido"
+			value="#{cadastroPedidoBean.pedido.valorTotal}"
+			style="font-weight: bold; font-size:1.1em;">
+			<f:convertNumber type="currency" />
 		</h:outputText>
-		
+
 	</p:panelGrid>
 
 </ui:composition>

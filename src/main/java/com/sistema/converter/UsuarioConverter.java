@@ -5,27 +5,27 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import com.sistema.model.Produto;
-import com.sistema.repositoty.Produtos;
+import com.sistema.model.Usuario;
+import com.sistema.repositoty.Usuarios;
 import com.sistema.util.cdi.CDIServiceLocator;
 
-@FacesConverter(forClass = Produto.class)
-public class ProdutoConverter implements Converter {
+@FacesConverter(forClass = Usuario.class)
+public class UsuarioConverter implements Converter {
 	//@Inject
-	private Produtos produtos;
+	private Usuarios usuarios;
 	
-	public ProdutoConverter() {
-		produtos =  CDIServiceLocator.getBean(Produtos.class);
+	public UsuarioConverter() {
+		usuarios =  CDIServiceLocator.getBean(Usuarios.class);
 	}
 
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent comp, String value) {
-		Produto retorno = null;
+		Usuario retorno = null;
 		if(value == null || value.isEmpty()){
 			return null;
 		}
 			Long id = Long.parseLong(value);
-			retorno = produtos.porId(id);
+			retorno = usuarios.porId(id);
 		
 		return retorno;
 	}
@@ -33,8 +33,8 @@ public class ProdutoConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent comp, Object value) {
 		if(value != null){
-			Produto produto = (Produto) value;
-			return produto.getId() == null ? null : produto.getId().toString();
+			Usuario usuario = (Usuario) value;
+			return usuario.getId() == null ? null : usuario.getId().toString();
 		}
 		
  		return "";

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="item_pedido")
@@ -17,19 +18,19 @@ public class ItemPedido implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long id;
-	private Integer quantidade;
-	private BigDecimal valorUnitario;
+	private Long id;
+	private Integer quantidade =1;
+	private BigDecimal valorUnitario = BigDecimal.ZERO;
 	private Pedido pedido;
 	private Produto produto;
 	
 	@Id
 	@GeneratedValue
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	@Column(nullable=false, length=5)
@@ -88,5 +89,16 @@ public class ItemPedido implements Serializable {
 			return false;
 		return true;
 	}
+	
+	@Transient
+	public boolean produtoAssociado(){
+		return this.getProduto() != null & this.getProduto().getId() != null;
+	}
+	
+	@Transient
+	public BigDecimal getValorTotal() {
+		return this.getValorUnitario().multiply(new BigDecimal(this.getQuantidade()));
+	}
+	
 
 }

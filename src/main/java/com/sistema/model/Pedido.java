@@ -20,41 +20,53 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="pedido")
+@Table(name = "pedido")
 public class Pedido implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long id;
+	private Long id;
 	private Date dataCriacao;
-	private String observacao;
 	private Date dataEntrega;
+	private String observacao;
 	private BigDecimal valorFrete = BigDecimal.ZERO;
 	private BigDecimal valorDesconto = BigDecimal.ZERO;
 	private BigDecimal valorTotal = BigDecimal.ZERO;
 
 	private StatusPedido status = StatusPedido.ORCAMENTO;
+	private FormaPagamento formaPagamento = FormaPagamento.DINHEIRO;
 	private Cliente cliente;
 	private Usuario vendedor;
-	private FormaPagamento formaPagamento;
 	private EnderecoEntrega enderecoEntrega;
 	private List<ItemPedido> itens = new ArrayList<>();
 
+	@Transient
+	public boolean isNovo() {
+		return getId() == null;
+	}
+
+	@Transient
+	public boolean isExistente() {
+		return !isNovo();
+	}
+
 	@Id
 	@GeneratedValue
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
+
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data_criacao", nullable=false)
+	@Column(name = "data_criacao", nullable = false)
 	public Date getDataCriacao() {
 		return dataCriacao;
 	}
@@ -62,7 +74,8 @@ public class Pedido implements Serializable {
 	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
-	@Column(columnDefinition="text")
+
+	@Column(columnDefinition = "text")
 	public String getObservacao() {
 		return observacao;
 	}
@@ -70,9 +83,10 @@ public class Pedido implements Serializable {
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+
 	@NotNull
 	@Temporal(TemporalType.DATE)
-	@Column(name="data_entrega", nullable=false)
+	@Column(name = "data_entrega", nullable = false)
 	public Date getDataEntrega() {
 		return dataEntrega;
 	}
@@ -80,8 +94,9 @@ public class Pedido implements Serializable {
 	public void setDataEntrega(Date dataEntrega) {
 		this.dataEntrega = dataEntrega;
 	}
+
 	@NotNull
-	@Column(name="valor_frete", nullable=false, precision=10, scale=2)
+	@Column(name = "valor_frete", nullable = false, precision = 10, scale = 2)
 	public BigDecimal getValorFrete() {
 		return valorFrete;
 	}
@@ -89,8 +104,9 @@ public class Pedido implements Serializable {
 	public void setValorFrete(BigDecimal valorFrete) {
 		this.valorFrete = valorFrete;
 	}
+
 	@NotNull
-	@Column(name="valor_desconto", nullable=false, precision=10, scale=2)
+	@Column(name = "valor_desconto", nullable = false, precision = 10, scale = 2)
 	public BigDecimal getValorDesconto() {
 		return valorDesconto;
 	}
@@ -98,8 +114,9 @@ public class Pedido implements Serializable {
 	public void setValorDesconto(BigDecimal valorDesconto) {
 		this.valorDesconto = valorDesconto;
 	}
+
 	@NotNull
-	@Column(name="valor_total", nullable=false, precision=10, scale=2)
+	@Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
 	public BigDecimal getValorTotal() {
 		return valorTotal;
 	}
@@ -107,9 +124,10 @@ public class Pedido implements Serializable {
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
 	}
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	@Column(nullable=false,length=20)
+	@Column(nullable = false, length = 20)
 	public StatusPedido getStatus() {
 		return status;
 	}
@@ -117,9 +135,10 @@ public class Pedido implements Serializable {
 	public void setStatus(StatusPedido status) {
 		this.status = status;
 	}
+
 	@NotNull
-	@ManyToOne
-	@JoinColumn(name="cliente_id", nullable=false)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cliente_id", nullable = false)
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -127,9 +146,10 @@ public class Pedido implements Serializable {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	@Column(name="forma_pagamento", nullable=false, length=20)
+	@Column(name = "forma_pagamento", nullable = false, length = 20)
 	public FormaPagamento getFormaPagamento() {
 		return formaPagamento;
 	}
@@ -137,6 +157,7 @@ public class Pedido implements Serializable {
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
 	}
+
 	@Embedded
 	public EnderecoEntrega getEnderecoEntrega() {
 		return enderecoEntrega;
@@ -145,9 +166,10 @@ public class Pedido implements Serializable {
 	public void setEnderecoEntrega(EnderecoEntrega enderecoEntrega) {
 		this.enderecoEntrega = enderecoEntrega;
 	}
+
 	@NotNull
-	@ManyToOne
-	@JoinColumn(name="vendedor_id", nullable=false)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "vendedor_id", nullable = false)
 	public Usuario getVendedor() {
 		return vendedor;
 	}
@@ -155,7 +177,8 @@ public class Pedido implements Serializable {
 	public void setVendedor(Usuario usuario) {
 		this.vendedor = usuario;
 	}
-	@OneToMany(mappedBy="pedido",cascade=CascadeType.ALL, orphanRemoval=true)
+
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<ItemPedido> getItens() {
 		return itens;
 	}
@@ -184,6 +207,58 @@ public class Pedido implements Serializable {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	// -------------------------------------
+
+	@Transient
+	public BigDecimal getValorSubTotal() {
+		return getValorTotal().subtract(getValorFrete()).add(getValorDesconto());
+	}
+
+	public void calcularValorTotal() {
+		BigDecimal total = BigDecimal.ZERO;
+		total = total.add(this.getValorFrete()).subtract(this.getValorDesconto());
+
+		for (ItemPedido itemPedido : this.getItens()) {
+			if (itemPedido.getProduto() != null && itemPedido.getProduto().getId() != null)
+				total = total.add(itemPedido.getValorTotal());
+		}
+
+		this.setValorTotal(total);
+	}
+
+	public void adicionarItemVazio() {
+		if (this.isOrcamento()) {
+
+			Produto prod = new Produto();
+
+			ItemPedido item = new ItemPedido();
+			item.setProduto(prod);
+			item.setPedido(this);
+
+			this.getItens().add(0, item);
+
+		}
+	}
+
+	@Transient
+	public boolean isOrcamento() {
+		return getStatus().equals(StatusPedido.ORCAMENTO);
+	}
+
+	public void removerItemVazio() {
+		ItemPedido itemVazio = getItens().get(0);
+
+		if (itemVazio != null && itemVazio.getProduto().getId() == null) {
+			this.getItens().remove(0);
+		}
+
+	}
+
+	@Transient
+	public boolean isValorNegativo() {
+		return this.getValorTotal().compareTo(BigDecimal.ZERO) < 0;
 	}
 
 }

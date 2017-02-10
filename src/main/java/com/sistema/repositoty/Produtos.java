@@ -40,7 +40,7 @@ public class Produtos implements Serializable {
 		}
 
 		if (StringUtils.isNotBlank(filtro.getNome())) {
-			predicate = builder.and(predicate, builder.like(from.get("nome"), "%"+filtro.getNome()+"%"));
+			predicate = builder.and(predicate, builder.like(from.get("nome"), "%" + filtro.getNome() + "%"));
 		}
 		TypedQuery<Produto> tq = manager
 				.createQuery(query.select(from).where(predicate).orderBy(builder.asc(from.get("nome"))));
@@ -52,16 +52,16 @@ public class Produtos implements Serializable {
 	}
 
 	@Transactional
-	public void remover(Produto produto){
-		try{
+	public void remover(Produto produto) {
+		try {
 			produto = porId(produto.getId());
 			manager.remove(produto);
 			manager.flush();
-		}catch (PersistenceException e) {
+		} catch (PersistenceException e) {
 			throw new NegocioException("Não é possivel excluir esse produto!" + e.getMessage());
 		}
 	}
-	
+
 	public Produto porNumero(String numero) {
 		try {
 			return manager.createQuery("from Produto where upper(numero) = :numero", Produto.class)
@@ -73,6 +73,11 @@ public class Produtos implements Serializable {
 
 	public Produto porId(Long id) {
 		return manager.find(Produto.class, id);
+	}
+
+	public List<Produto> porNome(String nome) {
+		return manager.createQuery("from Produto where upper(nome) like :nome", Produto.class)
+				.setParameter("nome", nome.toUpperCase() + "%").getResultList();
 	}
 
 }
