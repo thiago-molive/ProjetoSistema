@@ -10,8 +10,8 @@
 			<p:commandButton id="salvar" value="Salvar" action="#{cadastroPedidoBean.salvar}" update="@form"/>
 		</p:toolbarGroup>
 		<p:toolbarGroup align="right">
-			<p:commandButton value="Emitir" />
-			<p:commandButton value="Cancelar" />
+			<p:commandButton value="Emitir" action="#{emitirPedidoBean.emitirPedido()}" process="@form" update="@form"/>
+			<p:commandButton value="Cancelar" action="#{cancelarPedidoBean.cancelarPedido()}" process="@this" update="@form"/>
 			<p:commandButton value="Enviar por E-mail" />
 			<p:separator />
 			<p:button value="Pesquisa" outcome="/pedidos/pesquisaPedidos"/>

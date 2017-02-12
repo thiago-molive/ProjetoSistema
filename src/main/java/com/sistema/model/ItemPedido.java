@@ -90,6 +90,8 @@ public class ItemPedido implements Serializable {
 		return true;
 	}
 	
+	//-----------------------------------
+	
 	@Transient
 	public boolean produtoAssociado(){
 		return this.getProduto() != null & this.getProduto().getId() != null;
@@ -99,6 +101,10 @@ public class ItemPedido implements Serializable {
 	public BigDecimal getValorTotal() {
 		return this.getValorUnitario().multiply(new BigDecimal(this.getQuantidade()));
 	}
-	
-
+	@Transient
+	public boolean estoqueSuficiente(){
+		return this.pedido.isEmitido() ||
+				this.getProduto().getId() == null || 
+					this.produto.getQuantidadeEstoque() >= this.getQuantidade();
+	}
 }

@@ -3,6 +3,8 @@ package com.sistema.controller;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -10,6 +12,8 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.sistema.annotation.PedidoEditar;
+import com.sistema.event.PedidoEvent;
 import com.sistema.model.Cliente;
 import com.sistema.model.EnderecoEntrega;
 import com.sistema.model.FormaPagamento;
@@ -40,6 +44,8 @@ public class CadastroPedidoBean implements Serializable {
 	@Inject
 	private CadastroPedidoService pedidoService;
 
+	@Produces
+	@PedidoEditar
 	private Pedido pedido;
 	private Produto produtoLinhaEditavel;
 
@@ -56,6 +62,11 @@ public class CadastroPedidoBean implements Serializable {
 		} else {
 			System.out.println("PreRendewView");
 		}
+	}
+	
+	//observa o event de alteração do pedido fired by EmitirPedidoBean.emitirPedido
+	public void receberPedidoAlteradoCDI(@Observes PedidoEvent event){
+		this.pedido = event.getPedido();
 	}
 
 	private void limpar() {

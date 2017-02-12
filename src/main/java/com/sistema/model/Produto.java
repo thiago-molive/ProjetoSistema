@@ -17,6 +17,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.sistema.service.NegocioException;
 import com.sistema.validation.CodigoNumero;
 
 @Entity
@@ -111,6 +112,20 @@ public class Produto implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public void baixarEstoque(Integer quantidade) {
+		int nova = this.getQuantidadeEstoque() - quantidade;
+		
+		if(nova < 0){
+			throw new NegocioException("Não há " + quantidade + " itens no estoque do produto " + this.getNome());
+		}
+		
+		this.setQuantidadeEstoque(nova);
+	}
+
+	public void addEstoque(Integer quantidade) {
+		this.setQuantidadeEstoque(this.getQuantidadeEstoque() + quantidade);
 	}
 
 }

@@ -26,7 +26,7 @@ public class CadastroPedidoService implements Serializable {
 		pedido.calcularValorTotal();
 		
 		if(!pedido.isOrcamento()){
-			throw new NegocioException("Não foi possivel alterar esse pedido");
+			throw new NegocioException("Não foi possivel alterar esse pedido no status " + pedido.getStatus().getDescricao().toLowerCase());
 		}
 		
 		if (pedido.getItens().isEmpty()) {

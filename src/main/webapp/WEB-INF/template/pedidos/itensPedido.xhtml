@@ -54,7 +54,10 @@
 		</p:column>
 
 		<p:column headerText="Estoque" style="text-align: center" width="100">
-			<h:outputText value="#{item.produto.quantidadeEstoque}" />
+			<h:outputText value="#{item.produto.quantidadeEstoque}" style="#{not item.estoqueSuficiente() ? 'color: red' : ''}" />
+			<p:graphicImage library="images" name="alerta.png" id="semEstoque" rendered="#{not item.estoqueSuficiente()}"
+				style="vertical-align:top; margin-left: 5px;"/>
+			<p:tooltip for="semEstoque" value="Estoque insuficiente" rendered="#{not item.estoqueSuficiente()}"/>
 		</p:column>
 
 		<p:column headerText="Valor Total"
